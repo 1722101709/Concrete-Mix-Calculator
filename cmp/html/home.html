@@ -1,0 +1,247 @@
+{% load static %}
+<html>
+<head>
+    <title>Concrete Mix Proportion Calculation</title>
+</head>
+
+<style>
+    *{
+        margin : 0px;
+        padding : 0px;
+        box-sizing : border-box;
+    }
+    body{
+        color : #F3F3F3;
+        background : #010101;
+        height : cover;
+    }
+    .container, .box, .form, .grade{
+        display : flex;
+        justify-content : center;
+        align-items : center;
+        flex-direction : column;
+    }
+    .heading{
+        font-size : 37px;
+        margin : 20px 0px 50px 0px;
+        text-decoration : 2px double underline;
+    }
+    .form{
+        padding : 50px;
+        backdrop-filter : blur(20px);
+        background : #090909;
+        border-radius : 11px;
+        box-shadow : 0px 0px 5px wheat;
+    }
+    .options{
+        color : #F3F3F3;
+        background : #010101;
+        font-size : 17px;
+        cursor : pointer;
+        padding : 10px 0px 10px 10px;
+        border-radius : 7px;
+        margin : 20px 0px;
+        outline : none;
+        width : 270px;
+    }
+    .options:hover{
+        border-color : orange;
+    }
+    .options > option{
+        text-align : center;
+        cursor : pointer;
+        font-style : italic;
+        font-size : 11px;
+        color : #F3F3F3;
+    }
+    .options-heading{
+        font-size : 19px;
+        color : red;
+        
+    }
+    .submit{
+        outline : none;
+        width : 110px;
+        aspect-ratio : 3/1.5;
+        text-align : center;
+        padding : 3px;
+        font-size : 19px;
+        cursor : pointer;
+        border-radius : 7px;
+        color : #e19e22;
+        background : blue;
+        font-weight : 600;
+        transition : 0.25s ease-in-out;
+    }
+    .submit:hover{
+        color : blue;
+        background : wheat;
+    }
+    label{
+        display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: text;
+		background: transparent;
+		margin: 20px 0px;
+    }
+    .ph{
+		font-size: 17px;
+		position: absolute;
+		z-index: 3;
+		transition: 0.75s ease-in-out;
+		transition-delay: 0.1s;
+		opacity: 0.1;
+		font-weight: 300;
+		background : #010101;
+	}
+	input{
+		border: none;
+		outline: none;
+		font-size: 17px;
+		border: 1px solid #777;
+		width : 270px;
+		height: 36px;
+		border-radius: 13px;
+		padding: 5px 0px 5px 7px;
+		text-align: center;
+		background : transparent;
+		color : #F3F3F3;
+		padding: 10px 0px 10px 10px;
+	}
+	input:focus{
+		border-color: #BD8C1F;
+	}
+	input:focus + .ph{
+		font-size: 13px;
+		transform: translate(0, calc(-50% - 9px));
+		opacity: 1;
+		color: lightcyan;
+		font-weight: 900;
+		font-style: italic;
+	}
+	.up{
+	    font-size: 13px;
+		transform: translate(0, calc(-50% - 9px));
+		opacity: 1;
+		color: lightcyan;
+		font-weight: 900;
+		font-style: italic;
+	}
+</style>
+<body>
+<div class="container">
+    <span class="heading">Concrete Mix Proportion Calculator</span>
+    <div class="box">
+        <form action="response" method="post" class="form">
+            {% csrf_token %}
+            
+            <select name="cement" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;">Type of Cement</option>
+                <option>Ordinary Portland Cement (OPC)</option>
+                <option>Portland Pozzolana Cement (PPC)</option>
+                <option>Rapid Hardening Cement (RHC)</option>
+                <option>Quick Setting Cement (QSC)</option>
+                <option>Low Heat Cement (LHC)</option>
+                <option>Sulphate Resistant Cement (SRC)</option>
+            </select>
+            
+            <select name="grade" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;">Select Grade</option>
+                <option>M10</option>
+                <option>M15</option>
+                <option>M20</option>
+                <option>M25</option>
+                <option>M30</option>
+                <option>M35</option>
+                <option>M40</option>
+                <option>M45</option>
+                <option>M50</option>
+                <option>M55</option>
+            </select>
+    
+            <select name="exposure" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;"> Select Exposure</option>
+                <option>Mild</option>
+                <option>Moderate</option>
+                <option>Severe</option>
+                <option>Very Severe</option>
+                <option>Extreme</option>
+            </select>
+    
+            <select name="max-nom-size-agg" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;">Maximum Nominal Size of Aggregate</option>
+                <option>10mm</option>
+                <option>20mm</option>
+                <option>40mm</option>
+            </select>
+            
+            <select name="concreteType" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;">Concrete Type</option>
+                <option>Plain</option>
+                <option>Reinforced</option>
+            </select>
+            
+            <select name="workability" class="options">
+                <option selected class="options-heading" style="font-size : 19px; color : red;">Workability</option>
+                <option>50mm</option>
+                <option>75mm</option>
+                <option>100mm</option>
+                <option>125mm</option>
+                <option>150mm</option>
+            </select>
+            
+            <select name="meth-con-pla" class="options">
+                <option class="options-heading" style="font-size : 19px; color : red;" selected>Method of Concrete Placing</option>
+                <option>Pumping</option>
+            </select>
+            
+            <label>
+                <input type="text" name="sgc">
+                <span class="ph">Specific Gravity of Cement</span>
+            </label>
+            
+            <label>
+                <input type="text" name="sgca">
+                <span class="ph">specific gravity of coarse aggregate</span>
+            </label>
+            
+            <label>
+                <input type="text" name="sgfa">
+                <span class="ph">specific gravity of fine aggregate</span>
+            </label>
+            
+            <label>
+                <input type="text" name="sga">
+                <span class="ph">specific gravity of admixture</span>
+            </label>
+    
+            <input type="submit" class="submit">
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = () => {
+        var eles = document.querySelectorAll('.options');
+        for(let i = 0; i < eles.length; i++){
+            eles[i].addEventListener('change', () => {
+                eles[i].style.color = (eles[i].selectedIndex == 0) ? '#F3F3F3':'#51df51';
+            })
+        }
+    }
+    
+    let eles = document.querySelectorAll('label > input');
+    for(let i = 0; i < eles.length; i++){
+        eles[i].addEventListener('blur', () => {
+            let span = eles[i].nextElementSibling;
+            if(eles[i].value == ""){
+                span.classList.remove('up');
+            }
+            else{
+                span.classList.add('up');
+            }
+        })
+    }
+</script>
+</html>
